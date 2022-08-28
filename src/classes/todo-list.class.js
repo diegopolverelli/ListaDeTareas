@@ -1,15 +1,30 @@
+import { Todo } from "./todo.class";
 
+const todoCount=document.querySelector('.todo-count');
+let cuenta=0;
 
 export class TodoList {
+
 
     constructor(){
         // this.todos=[];
         this.cargarLocalStorage();
+
+        this.cuentaPendientes()
+    }
+
+    cuentaPendientes(){
+        cuenta=0;
+        this.todos.forEach( (todo) => {
+            if (!todo.completado) cuenta++;
+        });
+        todoCount.innerHTML=cuenta;
     }
 
     nuevoTodo(todo){
         this.todos.push(todo);
         this.guardarLocalStorage();
+        this.cuentaPendientes()
 
     }
 
@@ -20,6 +35,8 @@ export class TodoList {
         // Luego asigno ese array a this.todos, y listo. Queda eliminado el 
         // elemento que quería borrar
         this.guardarLocalStorage();
+        this.cuentaPendientes()
+
     }
 
     marcarCompletado( id ){
@@ -37,6 +54,9 @@ export class TodoList {
 
             }
         }
+
+        this.cuentaPendientes()
+
     }
 
     eliminarCompletados(){
@@ -64,6 +84,12 @@ export class TodoList {
                         ? JSON.parse(localStorage.getItem('todo')) 
                         : [];
 
+        // el .map es un método de todos los arreglos que recorre el 
+        // array, ejecuta por cada item una función, y devuelve el resultado
+        // de esa función (el ítem modificado por esa función...)
+        this.todos = this.todos.map(obj=>Todo.fromJson(obj));
+    
+        // console.log(this.todos);
     }
 
 

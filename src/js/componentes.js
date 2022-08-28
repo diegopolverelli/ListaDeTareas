@@ -5,6 +5,8 @@ import { Todo } from "../classes";
 const divTodoList=document.querySelector('.todo-list');
 const txtInput=document.querySelector('.new-todo');
 const btnBorrar=document.querySelector('.clear-completed');
+const ulFiltros=document.querySelector('.filters');
+const anchorFiltros=document.querySelectorAll('.filtro');
 
 export const crearTodoHtml = (todo) => {
 
@@ -89,10 +91,51 @@ btnBorrar.addEventListener('click',()=>{
     for(let i=divTodoList.children.length-1; i>=0; i--){
         const elemento = divTodoList.children[i];
 
-        console.log(elemento);
         if(elemento.classList.contains('completed')){
             divTodoList.removeChild(elemento);
         }
 
     }
+});
+
+
+ulFiltros.addEventListener('click',(event)=>{
+
+    const filtro=event.target.text;
+    if (!filtro) {return;}; // esto es por si se hace click en 
+                            // un lugar de la ul que no sea el enlace... 
+                            // en medio de 2 enlaces x ej... recordar que 
+                            // lo que elegí es una ul. Luego, si hago click
+                            // en medio, el valor que devuelve para target.text es undefined
+
+                            
+    anchorFiltros.forEach(elem=>elem.classList.remove('selected'));
+    event.target.classList.add('selected');
+
+    for (const elemento of divTodoList.children){
+
+        elemento.classList.remove('hidden');
+
+        const completado=elemento.classList.contains('completed');
+
+        // console.log(filtro, completado);
+
+        switch(filtro){
+            case 'Pendientes':
+                if(completado){
+                    elemento.classList.add('hidden');
+                }
+                break;
+
+            case 'Completados':
+                if(!completado){
+                    elemento.classList.add('hidden');
+                }
+                break;
+            
+            }
+    }
+
+
+
 });
